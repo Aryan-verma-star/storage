@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #banner {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            display: block;
+        }
+
+        #slides-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            display: none;
+            background: #000;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        #next-arrow {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        #next-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        #next-arrow::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 30px solid rgba(255, 255, 255, 0.7);
+            margin-left: 8px;
+        }
+
+        #next-arrow:hover::after {
+            border-left-color: rgba(255, 255, 255, 1);
+        }
+
+        #prev-arrow {
+            position: fixed;
+            bottom: 30px;
+            right: 130px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        #prev-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        #prev-arrow::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 30px solid rgba(255, 255, 255, 0.7);
+            margin-right: 8px;
+        }
+
+        #prev-arrow:hover::after {
+            border-right-color: rgba(255, 255, 255, 1);
+        }
+
+        .controls-visible {
+            display: flex !important;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <img id="banner" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/refs/heads/main/SIC%20banner%20(3)_page-0001.jpg" alt="Banner">
+
+    <div id="slides-container">
+        <img class="slide active" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-1.png" alt="Slide 1">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-2.png" alt="Slide 2">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-3.png" alt="Slide 3">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-4.png" alt="Slide 4">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-5.png" alt="Slide 5">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-6.png" alt="Slide 6">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-7.png" alt="Slide 7">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-8.png" alt="Slide 8">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-9.png" alt="Slide 9">
+        <img class="slide" src="https://raw.githubusercontent.com/Aryan-verma-star/storage/main/presentation_slides/slide-10.png" alt="Slide 10">
+    </div>
+
+    <div id="prev-arrow"></div>
+    <div id="next-arrow"></div>
+
+    <script>
+        const banner = document.getElementById('banner');
+        const slidesContainer = document.getElementById('slides-container');
+        const slides = document.querySelectorAll('.slide');
+        const nextArrow = document.getElementById('next-arrow');
+        const prevArrow = document.getElementById('prev-arrow');
+
+        let showingBanner = true;
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function startPresentation() {
+            showingBanner = false;
+            banner.classList.add('hidden');
+            slidesContainer.style.display = 'block';
+            showSlide(0);
+            nextArrow.classList.add('controls-visible');
+            prevArrow.classList.add('controls-visible');
+        }
+
+        function returnToBanner() {
+            showingBanner = true;
+            banner.classList.remove('hidden');
+            slidesContainer.style.display = 'none';
+            nextArrow.classList.remove('controls-visible');
+            prevArrow.classList.remove('controls-visible');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (showingBanner) {
+                if (e.key === ' ' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    startPresentation();
+                }
+            } else {
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    returnToBanner();
+                }
+            }
+        });
+
+        nextArrow.addEventListener('click', nextSlide);
+        prevArrow.addEventListener('click', prevSlide);
+    </script>
+</body>
+</html>
